@@ -8,7 +8,7 @@ function Title(props) {
             `} >
                 {props.title}
                 </h1>
-            <hr className={`border-2 border-purple-500`}/>
+            <hr className={`border-2 border-blue-500`}/>
         </div>
     )
 }
