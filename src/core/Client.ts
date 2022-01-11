@@ -10,7 +10,7 @@ export default class CLiente{
         this.#id = id
     }
 
-    static void(){
+    static vazio(){
         new CLiente("", 0)
     }
 

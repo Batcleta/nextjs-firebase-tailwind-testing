@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useState } from "react";
 import Botão from "../components/Botão";
 import Formulario from "../components/Formulario";
 import Layout from "../components/Layout";
@@ -7,6 +8,10 @@ import Cliente from "../core/Client";
 
 export default function Home() {
   
+  const [cliente, setCliente] = useState<Cliente>(Cliente.vazio())
+  const [visivel, setVisivel] = useState<'tabela' | 'form'>('tabela')
+  
+
   const clientes =[
     new Cliente('Ana', 34, '1'),
     new Cliente('Bia', 25, '2'),
@@ -22,11 +27,22 @@ export default function Home() {
   ]
 
   function clienteSelecionado(cliente: Cliente){
-    console.log(cliente.nome)
+    setCliente(cliente)
+    setVisivel('form')
   }
 
   function clienteExcluido(cliente: Cliente){
     console.log(cliente.nome)
+  }
+
+  function novoCliente (){
+    setCliente(Cliente.vazio())
+    setVisivel('form')
+  }
+
+  function salvarCliente(cliente: Cliente){
+    console.log(cliente)
+    setVisivel('tabela')
   }
 
   return (
@@ -34,15 +50,27 @@ export default function Home() {
     bg-gradient-to-r from-blue-500 to-blue-900 text-white
     `}>
       <Layout title="Cadastro simples">
-        <div className="flex justify-end">  
-          <Botão cor="green" className="mb-4">Novo cliente</Botão>
-        </div>
-        <Formulario cliente={clientes[0]}/>
-        {/* <Tabela 
-          clientes={clientes} 
-          clienteSelecionado={clienteSelecionado}
-          clienteExcluido={clienteExcluido}
-           /> */}
+
+        {visivel === 'tabela'? (
+          <>
+            <div className="flex justify-end">  
+              <Botão onClick={novoCliente} cor="green" className="mb-4">Novo cliente</Botão>
+            </div>
+          
+             <Tabela 
+             clientes={clientes} 
+             clienteSelecionado={clienteSelecionado}
+             clienteExcluido={clienteExcluido}
+             />
+          </>
+        ): (
+          <Formulario 
+          cliente={cliente} 
+          clienteMudou={salvarCliente}
+          cancelado={() => setVisivel('tabela')}
+          />
+        )}
+     
       </Layout>
     </div>
   );
